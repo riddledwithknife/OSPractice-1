@@ -1,6 +1,8 @@
 import win32api
 import win32file
+import os
 
+# 1ое задание
 DRIVE_TYPES = """
 0 	Unknown
 1 	No Root Directory
@@ -41,3 +43,19 @@ for disk in drives_data.keys():
     Метка: {drives_data[disk]['volume_label']}
     '''
     print(s)
+
+
+# 2ое задание
+def filework():
+    name = input("Введите название файла: ")
+    my_file = open(name, "wt")
+    text = input("Введите, что записать в файл: ")
+    print(text, file=my_file, sep=" ", end=" ")
+    my_file.close()
+    my_file = open(name, "r")
+    print(my_file.read())
+    my_file.close()
+    os.remove(name)
+
+
+filework()
