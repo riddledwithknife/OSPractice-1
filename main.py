@@ -1,6 +1,8 @@
 import win32api
 import win32file
 import os
+import json
+
 
 # 1ое задание
 DRIVE_TYPES = """
@@ -12,8 +14,6 @@ DRIVE_TYPES = """
 5 	Compact Disc
 6 	RAM Disk
 """
-
-drive_types = dict((int(i), j) for (i, j) in (l.split("\t") for l in DRIVE_TYPES.splitlines() if l))
 
 
 def get_drives_info():
@@ -33,6 +33,7 @@ def get_drives_info():
     return dict_drives
 
 
+drive_types = dict((int(i), j) for (i, j) in (l.split("\t") for l in DRIVE_TYPES.splitlines() if l))
 drives_data = get_drives_info()
 for disk in drives_data.keys():
     s = f'''
@@ -45,17 +46,49 @@ for disk in drives_data.keys():
     print(s)
 
 
-# 2ое задание
-def filework():
-    name = input("Введите название файла: ")
-    my_file = open(name, "wt")
-    text = input("Введите, что записать в файл: ")
-    print(text, file=my_file, sep=" ", end=" ")
-    my_file.close()
-    my_file = open(name, "r")
-    print(my_file.read())
-    my_file.close()
-    os.remove(name)
+v = input('Выберите задание, введя цифру:\n'
+          '1. Работа с файлами\n'
+          '2. Работа с форматом JSON\n'
+          '3. Работа с форматом XML\n'
+          '4. Создание zip архива, добавление туда файла, определение размера архива\n')
 
 
-filework()
+match v:
+    case '1':
+        # 2ое задание
+        def filework():
+            name = input("Введите название файла: ")
+            my_file = open(name, "wt")
+            text = input("Введите, что записать в файл: ")
+            print(text, file=my_file, sep=" ", end=" ")
+            my_file.close()
+            my_file = open(name, "r")
+            print(my_file.read())
+            my_file.close()
+            os.remove(name)
+
+
+        filework()
+    case '2':
+        # 3е задание
+        class Person:
+            def __init__(self):
+                self.first_name = firstname
+                self.last_name = lastname
+                self.age = age
+                self.gender = gender
+
+        firstname = input('Введите имя: ')
+        lastname = input('Введите фамилию: ')
+        age = input('Введите возраст: ')
+        gender = input('Введите пол: ')
+
+        data = Person()
+
+        with open("data_file.json", "w") as write_file:
+            json.dump(data.__dict__, write_file)
+        with open("data_file.json", "r") as read_file:
+            json_data = json.load(read_file)
+
+        print(json_data)
+        os.remove('data_file.json')
