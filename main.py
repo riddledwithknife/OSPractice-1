@@ -2,6 +2,9 @@ import win32api
 import win32file
 import os
 import json
+from xml.dom import minidom
+import xml.etree.ElementTree as ET
+import zipfile
 
 
 # 1ое задание
@@ -92,3 +95,49 @@ match v:
 
         print(json_data)
         os.remove('data_file.json')
+    case '3':
+        # 4е задание
+        root = minidom.Document()
+
+        xml = root.createElement('root')
+        root.appendChild(xml)
+
+        productChild = root.createElement('Person')
+        productChild.setAttribute('Firstname', input("Введите имя: "))
+        productChild.setAttribute('Lastname', input("Введите фамилию: "))
+        productChild.setAttribute('Age', input("Введите возраст: "))
+        productChild.setAttribute('Gender', input("Введите пол: "))
+
+        xml.appendChild(productChild)
+
+        xml_str = root.toprettyxml(indent="\t")
+
+        save_path_file = "data_file.xml"
+
+        with open(save_path_file, "w") as f:
+            f.write(xml_str)
+        tree = ET.parse('data_file.xml')
+        root = tree.getroot()
+        print(root)
+        print(root[0].attrib)
+        os.remove('data_file.xml')
+    case '4':
+        # 5е задание
+        archive = zipfile.ZipFile('Data.zip', mode='w')
+        zipfilename = input('Введите название файла, который попадет в архив: ')
+        my_filezip = open(zipfilename, "wt")
+        textzip = input("Введите, что записать в файл: ")
+        print(textzip, file=my_filezip, sep=" ", end=" ")
+        my_filezip.close()
+        archive.write(zipfilename)
+        archive.close()
+        os.remove(zipfilename)
+        archive = zipfile.ZipFile('Data.zip', 'r')
+        print("Файлы в архиве: ")
+        archive.printdir()
+        print("Извлечение...")
+        archive.extractall()
+        archive.close()
+        print("Удаление файла и архива...")
+        os.remove(zipfilename)
+        os.remove("Data.zip")
